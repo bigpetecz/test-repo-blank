@@ -24,6 +24,14 @@ test('GET /health reports service health', () => {
   });
 });
 
+test('GET /version returns version info', () => {
+  assert.deepEqual(send('GET', '/version'), {
+    status: 200,
+    headers: { 'content-type': 'application/json' },
+    body: { version: '1' },
+  });
+});
+
 test('unknown paths and unsupported methods return 404', () => {
   assert.equal(send('GET', '/missing').status, 404);
   assert.equal(send('POST', '/health').status, 404);
