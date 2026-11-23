@@ -2,8 +2,15 @@ import { createServer } from 'node:http';
 
 export function createApp() {
   return createServer((request, response) => {
-    const healthy = request.method === 'GET' && request.url === '/health';
-    response.writeHead(healthy ? 200 : 404, { 'content-type': 'application/json' });
-    response.end(JSON.stringify(healthy ? { status: 'ok' } : { error: 'not found' }));
+    const isHealth = request.method === 'GET' && request.url === '/health';
+    const isVersion = request.method === 'GET' && request.url === '/version';
+
+    if (isHealth || isVersion) {
+      response.writeHead(200, { 'content-type': 'application/json' });
+      response.end(JSON.stringify(isHealth ? { status: 'ok' } : { version: '1' }));
+    } else {
+      response.writeHead(404, { 'content-type': 'application/json' });
+      response.end(JSON.stringify({ error: 'not found' }));
+    }
   });
 }
